@@ -2,8 +2,8 @@ import { experienceLevels, jobListingTypes, locationRequirements, wageIntervals 
 import z from "zod";
 
 export const JobListingSchema = z.object({
-    title: z.string().min(1),
-    description: z.string().min(1),
+    title: z.string().min(1, "Required"),
+    description: z.string().min(1, "Required"),
     experienceLevel: z.enum(experienceLevels),
     locationRequirement: z.enum(locationRequirements),
     type: z.enum(jobListingTypes),
