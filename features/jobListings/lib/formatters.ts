@@ -1,4 +1,4 @@
-import { experienceLevel, jobListingType, locationRequirement, WageInterval } from "@/drizzle/schema";
+import { experienceLevel, jobListingStatus, jobListingType, locationRequirement, WageInterval } from "@/drizzle/schema";
 
 export function formatWageInterval(interval: WageInterval) {
     switch(interval) {
@@ -54,4 +54,54 @@ export function formatExperienceLevel(experienceLevel: experienceLevel) {
                 `Unknown location requirement ${experienceLevel satisfies never}`
             )
     }
+}
+
+export function formatJobListingStatus(status: jobListingStatus) {
+    switch(status) {
+        case "published":
+            return "Active"
+        case "draft":
+            return "Draft"
+        case "delisted":
+            return "Delisted"
+        default:
+            throw new Error (
+                `Unknown location requirement ${status satisfies never}`
+            )
+    }
+}
+
+export function formateWage(wage: number, wageInterval: WageInterval) {
+    const wageFormatter = new Intl.NumberFormat("en-MX", {
+        style: "currency",
+        currency: "MXN",
+        minimumFractionDigits: 0
+    })
+
+    switch(wageInterval) {
+        case "hourly":
+            return `${wageFormatter.format(wage)} / hr`
+        case "yearly":
+            return `${wageFormatter.format(wage)}`
+        default:
+            throw new Error (
+                `Unknown location requirement ${wageInterval satisfies never}`
+            )
+    }
+}
+
+export function formatJobListingLocation({
+    stateAbbreviation, 
+    city
+}: {
+    stateAbbreviation: string | null
+    city: string | null
+}) {
+    if (stateAbbreviation == null && city == null) return "None"
+
+    const locationParts = []
+    if (city != null) locationParts.push(city)
+    if (stateAbbreviation != null) locationParts.push(stateAbbreviation)
+
+    return locationParts.join(", ")
 }
