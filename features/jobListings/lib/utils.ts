@@ -13,3 +13,16 @@ export function getNextJobListingStatus(status: jobListingStatus) {
             )
     }
 }
+
+export function sortJobListingsByStatus(
+    a: jobListingStatus, 
+    b: jobListingStatus
+) {
+    return JOB_LISTING_STATUS_SORT_ORDER[a] - JOB_LISTING_STATUS_SORT_ORDER[b]
+}
+
+const JOB_LISTING_STATUS_SORT_ORDER: Record<jobListingStatus, number> = {
+    published: 0,
+    draft: 1,
+    delisted: 2
+}
