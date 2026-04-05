@@ -124,9 +124,9 @@ async function getJobListings(orgId: string) {
   .from(JobListingTable)
   .where(eq(JobListingTable.organizationId, orgId))
   .leftJoin(JobListingApplicationTable,
-    eq(JobListingTable.id, JobListingApplicationTable.jobListinId)
+    eq(JobListingTable.id, JobListingApplicationTable.jobListingId)
   )
-  .groupBy(JobListingApplicationTable.jobListinId, JobListingTable.id)
+  .groupBy(JobListingApplicationTable.jobListingId, JobListingTable.id)
   .orderBy(desc(JobListingTable.createdAt))
 
   data.forEach(jobListing => {

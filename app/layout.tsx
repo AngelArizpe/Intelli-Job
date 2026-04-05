@@ -1,9 +1,10 @@
-import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
+import type { Metadata } from "next"
+import { Geist, Geist_Mono } from "next/font/google"
+import "./globals.css"
 import "@mdxeditor/editor/style.css"
-import { ClerkProvider } from "@/services/clerk/components/ClerkProvider";
-import { Toaster } from "@/components/ui/sonner";
+import { ClerkProvider } from "@/services/clerk/components/ClerkProvider"
+import { Toaster } from "@/components/ui/sonner"
+import { UploadThingSSR } from "@/services/uploadthing/components/UploadThingSSR"
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -34,6 +35,7 @@ export default function RootLayout({
         <body className="min-h-full flex flex-col">
           {children}
           <Toaster />
+          <UploadThingSSR />
           </body>
       </html>
     </ClerkProvider>

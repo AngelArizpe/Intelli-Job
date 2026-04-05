@@ -26,6 +26,7 @@ import { JobListingBadges } from "@/features/jobListings/components/jobListingBa
 import z from "zod";
 import { cacheTag } from "next/cache";
 import { getJobListingsGlobalTag } from "@/features/jobListings/db/cache/jobListings";
+import { getOrganizationIdTag } from "@/features/organizations/db/cache/organizations";
 
 type Props = {
   searchParams: Promise<Record<string, string | string[]>>;
@@ -110,7 +111,7 @@ function JobListingsListItem({
     .split(" ")
     .splice(0, 4)
     .map((word) => word[0])
-    .join("");
+    .join("")
 
   return (
     <Card
@@ -222,7 +223,7 @@ async function getJobListings(
     )
   }
 
-  return db.query.JobListingTable.findMany({
+  const data = await db.query.JobListingTable.findMany({
     where: or(
       jobListingId
         ? and(
@@ -235,6 +236,7 @@ async function getJobListings(
     with: {
       organization: {
         columns: {
+          id: true,
           name: true,
           imageURL: true,
         },
@@ -242,4 +244,10 @@ async function getJobListings(
     },
     orderBy: [desc(JobListingTable.isFeatured), desc(JobListingTable.postedAt)],
   })
+
+  data.forEach(listing => {
+    cacheTag(getOrganizationIdTag(listing.organization.id))
+  })
+
+  return data
 }

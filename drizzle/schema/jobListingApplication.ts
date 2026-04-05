@@ -16,7 +16,7 @@ export const applicationsStageEnum = pgEnum("job_listing_applications_stage", ap
 
 export const JobListingApplicationTable = pgTable(
     "job_listing_applications", {
-        jobListinId: uuid()
+        jobListingId: uuid()
             .references(() => JobListingTable.id, { onDelete: "cascade" })
             .notNull(),
         userId: varchar()
@@ -28,14 +28,14 @@ export const JobListingApplicationTable = pgTable(
         createdAt,
         updatedAt
     },
-    table => [primaryKey({ columns: [table.jobListinId, table.userId] })],
+    table => [primaryKey({ columns: [table.jobListingId, table.userId] })],
 )
 
 export const jobListingApplicationRelations = relations(
     JobListingApplicationTable, 
     ({ one }) => ({
         jobListing: one(JobListingTable, {
-            fields: [JobListingApplicationTable.jobListinId],
+            fields: [JobListingApplicationTable.jobListingId],
             references: [JobListingTable.id],
         }),
         user: one(UserTable, {

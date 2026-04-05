@@ -59,14 +59,14 @@ CREATE TABLE "user_resumes" (
 );
 --> statement-breakpoint
 CREATE TABLE "job_listing_applications" (
-	"jobListinId" uuid NOT NULL,
+	"jobListingId" uuid NOT NULL,
 	"userId" varchar NOT NULL,
 	"coverLetter" text,
 	"rating" integer,
 	"stage" "job_listing_applications_stage" DEFAULT 'applied' NOT NULL,
 	"createdAt" timestamp with time zone DEFAULT now() NOT NULL,
 	"updatedAt" timestamp with time zone DEFAULT now() NOT NULL,
-	CONSTRAINT "job_listing_applications_jobListinId_userId_pk" PRIMARY KEY("jobListinId","userId")
+	CONSTRAINT "job_listing_applications_jobListingId_userId_pk" PRIMARY KEY("jobListingId","userId")
 );
 --> statement-breakpoint
 CREATE TABLE "organization_user_settings" (
@@ -82,7 +82,7 @@ CREATE TABLE "organization_user_settings" (
 ALTER TABLE "job-listings" ADD CONSTRAINT "job-listings_organizationId_organization_id_fk" FOREIGN KEY ("organizationId") REFERENCES "public"."organization"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "user_notification_settings" ADD CONSTRAINT "user_notification_settings_userId_users_id_fk" FOREIGN KEY ("userId") REFERENCES "public"."users"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "user_resumes" ADD CONSTRAINT "user_resumes_userId_users_id_fk" FOREIGN KEY ("userId") REFERENCES "public"."users"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "job_listing_applications" ADD CONSTRAINT "job_listing_applications_jobListinId_job-listings_id_fk" FOREIGN KEY ("jobListinId") REFERENCES "public"."job-listings"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "job_listing_applications" ADD CONSTRAINT "job_listing_applications_jobListingId_job-listings_id_fk" FOREIGN KEY ("jobListingId") REFERENCES "public"."job-listings"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "job_listing_applications" ADD CONSTRAINT "job_listing_applications_userId_users_id_fk" FOREIGN KEY ("userId") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "organization_user_settings" ADD CONSTRAINT "organization_user_settings_userId_users_id_fk" FOREIGN KEY ("userId") REFERENCES "public"."users"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "organization_user_settings" ADD CONSTRAINT "organization_user_settings_organizationId_organization_id_fk" FOREIGN KEY ("organizationId") REFERENCES "public"."organization"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint

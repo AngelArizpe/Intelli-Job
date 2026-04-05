@@ -19,6 +19,6 @@ export function getIdTag(tag: CacheTag, id: string) {
     return `id:${id}-${tag}` as const
 }
 
-export function getOrganizationIdTag(tag: CacheTag, organizationId: string) {
+export function getOrganizationTag(tag: CacheTag, organizationId: string) {
     return `organization:${organizationId}-${tag}` as const
 }

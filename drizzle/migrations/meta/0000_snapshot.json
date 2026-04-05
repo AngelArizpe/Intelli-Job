@@ -1,5 +1,5 @@
 {
-  "id": "25f49e8c-abe4-4576-b4d8-420fefa3563d",
+  "id": "50e1ddf5-ffb2-483a-92fe-5cf3c33d7fb5",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -386,8 +386,8 @@
       "name": "job_listing_applications",
       "schema": "",
       "columns": {
-        "jobListinId": {
-          "name": "jobListinId",
+        "jobListingId": {
+          "name": "jobListingId",
           "type": "uuid",
           "primaryKey": false,
           "notNull": true
@@ -435,12 +435,12 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "job_listing_applications_jobListinId_job-listings_id_fk": {
-          "name": "job_listing_applications_jobListinId_job-listings_id_fk",
+        "job_listing_applications_jobListingId_job-listings_id_fk": {
+          "name": "job_listing_applications_jobListingId_job-listings_id_fk",
           "tableFrom": "job_listing_applications",
           "tableTo": "job-listings",
           "columnsFrom": [
-            "jobListinId"
+            "jobListingId"
           ],
           "columnsTo": [
             "id"
@@ -463,10 +463,10 @@
         }
       },
       "compositePrimaryKeys": {
-        "job_listing_applications_jobListinId_userId_pk": {
-          "name": "job_listing_applications_jobListinId_userId_pk",
+        "job_listing_applications_jobListingId_userId_pk": {
+          "name": "job_listing_applications_jobListingId_userId_pk",
           "columns": [
-            "jobListinId",
+            "jobListingId",
             "userId"
           ]
         }
