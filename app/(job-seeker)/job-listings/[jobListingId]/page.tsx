@@ -52,7 +52,7 @@ export default function JobListingPage({
           breakpoint="min-width: 1024px"
           otherwise={
             <ClientSheet>
-              <SheetContent showCloseButton className="p-4">
+              <SheetContent showCloseButton className="p-4 overflow-y-auto">
                 <SheetHeader className="sr-only">
                   <SheetTitle>Job listing details</SheetTitle>
                 </SheetHeader>

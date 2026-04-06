@@ -20,9 +20,7 @@ import {
   toolbarPlugin,
 } from "@mdxeditor/editor";
 import { Ref } from "react";
-
-export const markdownClassNames =
-  "max-w-none prose prose-natural dark:prose-invert font-sans";
+import { markdownClassNames } from "./MarkdownRenderer";
 
 export default function InternalMarkdownEditor({
   ref,

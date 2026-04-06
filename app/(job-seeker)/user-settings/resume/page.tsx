@@ -67,10 +67,10 @@ async function AISummaryCard() {
                 <CardDescription>
                     This is an AI-generated summary of your resume. This is used by employers to quickly understand your qualifications and experience.
                 </CardDescription>
-                <CardContent>
-                    <MarkDownRenderer source={userResume.aiSummary} />
-                </CardContent>
             </CardHeader>
+            <CardContent>
+                <MarkDownRenderer source={userResume.aiSummary} />
+            </CardContent>
         </Card>
     )
 }
