@@ -1,3 +1,4 @@
+import { JobListingTable } from "@/drizzle/schema"
 import { DeletedObjectJSON, UserJSON, OrganizationJSON } from "@clerk/nextjs/server"
 import { EventSchemas, Inngest } from "inngest"
 
@@ -25,6 +26,20 @@ type Events = {
     "app/resume.uploaded": {
         user: {
             id: string
+        }
+    },
+    "app/email.daily-user-job-listings": {
+        data: {
+            aiPropmp?: string
+            jobListings: (Omit<
+                    typeof JobListingTable.$inferSelect,
+                    "createdAt" | "postedAt" | "updatedAt" | "status" | "organizationId"
+                > & { organizationName: string }
+            )[]
+        }
+        user: {
+            email: string
+            name: string
         }
     }
 }
