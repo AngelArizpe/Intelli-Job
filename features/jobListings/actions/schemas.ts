@@ -28,3 +28,7 @@ export const JobListingSchema = z.object({
     message: "Required for non-remote listings",
     path: ["stateAbbreviation"]
 })
+
+export const JobListingAiSearchSchema = z.object({
+    query: z.string().min(1, "Required")
+})

@@ -42,7 +42,7 @@ const searchParamsSchema = z.object({
   type: z.enum(jobListingTypes).optional().catch(undefined),
   jobIds: z
     .union([z.string(), z.array(z.string())])
-    .transform((v) => (Array.isArray(v) ? v : [v]))
+    .transform(v => (Array.isArray(v) ? v : [v]))
     .optional()
     .catch([]),
 });
@@ -178,11 +178,13 @@ async function DaysSincePosting({ postedAt }: { postedAt: Date }) {
 }
 
 async function getJobListings(
-  searchParams: z.infer<typeof searchParamsSchema>,
+  rawSearchParams: any,
   jobListingId: string | undefined,
 ) {
   "use cache";
   cacheTag(getJobListingsGlobalTag())
+
+  const searchParams = searchParamsSchema.parse(rawSearchParams)
 
   const whereConditions: (SQL | undefined)[] = [];
   if (searchParams.title) {
@@ -218,8 +220,9 @@ async function getJobListings(
   }
 
   if (searchParams.jobIds) {
+    console.log("jobIds:", searchParams.jobIds, typeof searchParams.jobIds)
     whereConditions.push(
-      or(...searchParams.jobIds.map((jobId) => eq(JobListingTable.id, jobId))),
+      or(...searchParams.jobIds.map(jobId => eq(JobListingTable.id, jobId))),
     )
   }
 
