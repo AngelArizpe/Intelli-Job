@@ -1,5 +1,5 @@
-import { JobListingTable } from "@/drizzle/schema"
-import { DeletedObjectJSON, UserJSON, OrganizationJSON } from "@clerk/nextjs/server"
+import { JobListingApplicationTable, JobListingTable } from "@/drizzle/schema"
+import { DeletedObjectJSON, UserJSON, OrganizationJSON, OrganizationMembershipJSON } from "@clerk/nextjs/server"
 import { EventSchemas, Inngest } from "inngest"
 
 type ClerkWebhookData<T> = {
@@ -17,6 +17,8 @@ type Events = {
     "clerk/organization.created": ClerkWebhookData<OrganizationJSON>
     "clerk/organization.updated": ClerkWebhookData<OrganizationJSON>
     "clerk/organization.deleted": ClerkWebhookData<DeletedObjectJSON>
+    "clerk/organizationMembership.created": ClerkWebhookData<OrganizationMembershipJSON>
+    "clerk/organizationMembership.deleted": ClerkWebhookData<OrganizationMembershipJSON>
     "app/jobListingApplication.created": {
         data: {
             jobListingId: string,
@@ -37,6 +39,24 @@ type Events = {
                 > & { organizationName: string }
             )[]
         }
+        user: {
+            email: string
+            name: string
+        }
+    }
+    "app/email.daily-organization-user-applications": {
+        data: {
+            applications: (Pick<
+                typeof JobListingApplicationTable.$inferSelect,
+                "rating"
+            > & {
+                userName: string
+                organizationId: string
+                organizationName: string
+                jobListingId: string
+                jobListingTitle: string
+            })[]
+        },
         user: {
             email: string
             name: string
