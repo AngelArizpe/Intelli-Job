@@ -9,14 +9,19 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { Separator } from "@/components/ui/separator";
 import { db } from "@/drizzle/db";
-import { jobListingStatus, JobListingTable } from "@/drizzle/schema";
+import { JobListingApplicationTable, jobListingStatus, JobListingTable } from "@/drizzle/schema";
+import { ApplicationTable, SekeletonApplicationTable } from "@/features/jobListingApplications/components/ApplicationTable";
+import { getJobListingApplicationJobListingTag } from "@/features/jobListingApplications/db/cache/jobListingApplications";
 import { deleteJobListing, toggleJobListingFeatured, toggleJobListingStatus } from "@/features/jobListings/actions/actions";
 import { JobListingBadges } from "@/features/jobListings/components/jobListingBadges";
 import { getJobListingsIdTag } from "@/features/jobListings/db/cache/jobListings";
 import { formatJobListingStatus } from "@/features/jobListings/lib/formatters";
 import { hasReachedMaxFeaturedJobListings, hasReachedMaxPublishedJobListings } from "@/features/jobListings/lib/planFeatureHelpers";
 import { getNextJobListingStatus } from "@/features/jobListings/lib/utils";
+import { getUserResumeIdTag } from "@/features/users/db/cache/userResumes";
+import { getUserIdTag } from "@/features/users/db/cache/users";
 import { getCurrentOrganization } from "@/services/clerk/lib/getCurrentAuth";
 import { hasOrgUserPermissions } from "@/services/clerk/lib/orgUserPermissions";
 import { and, eq } from "drizzle-orm";
@@ -108,6 +113,13 @@ async function SuspendedPage({ params }: Props) {
         }
         dialogTitle="Description"
       />
+      <Separator />
+      <div className="space-y-6">
+        <h2 className="text-xl font-semibold">Applications</h2>
+        <Suspense fallback={<SekeletonApplicationTable />}>
+          <Applications jobListingId={jobListingId} />
+        </Suspense>
+      </div>
     </div>
   );
 }
@@ -277,4 +289,72 @@ function featuredToggleButtonText(isFeatured: boolean) {
         Feature
       </>
     )
+}
+
+async function Applications({ jobListingId }: { jobListingId: string }) {
+  const applications = await getJobListingApplications(jobListingId)
+
+  return (
+    <ApplicationTable
+      applications={applications.map(a => ({
+        ...a,
+        user: {
+          ...a.user,
+          resume: a.user.resume
+            ? {
+              ...a.user.resume,
+              markdownSummary: a.user.resume.aiSummary ? (
+                <MarkDownRenderer source={a.user.resume.aiSummary} />
+              ) : null
+            } 
+          : null
+        },
+        coverLetterMarkdown: a.coverLetter ? (
+          <MarkDownRenderer source={a.coverLetter} />
+        ) : null
+      }))} 
+      canUpdateRating={await hasOrgUserPermissions("org:applicant_manager_permissions:applicant_change_rating")} 
+      canUpdateStage={await hasOrgUserPermissions("org:applicant_manager_permissions:applicant_change_state")} 
+    />
+  )
+}
+
+async function getJobListingApplications(jobListingId: string) {
+  "use cache"
+  cacheTag(getJobListingApplicationJobListingTag(jobListingId))
+
+  const data = await db.query.JobListingApplicationTable.findMany({
+    where: eq(JobListingApplicationTable.jobListingId, jobListingId),
+    columns: {
+      coverLetter: true,
+      createdAt: true,
+      stage: true,
+      rating: true,
+      jobListingId: true,
+    },
+    with: {
+      user: {
+        columns: {
+          id: true,
+          name: true,
+          imageURL: true,
+        },
+        with: {
+          resume: {
+            columns: {
+              resumeFileUrl: true,
+              aiSummary: true
+            }
+          }
+        }
+      }
+    }
+  })
+
+  data.forEach(({ user }) => {
+    cacheTag(getUserIdTag(user.id))
+    cacheTag(getUserResumeIdTag(user.id))
+  })
+
+  return data
 }

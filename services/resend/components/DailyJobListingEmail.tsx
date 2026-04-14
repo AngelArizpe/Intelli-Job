@@ -106,22 +106,3 @@ function getBadges(jobListing: JobListing) {
 
   return badges;
 }
-
-DailyJobListingEmail.PreviewProps = {
-  jobListings: [
-    {
-      city: null,
-      stateAbbreviation: null,
-      title: "Software engineer",
-      wage: 10000000,
-      wageInterval: "yearly",
-      experienceLevel: "mid-level",
-      type: "full-time",
-      id: "123456",
-      organizationName: "Google",
-      locationRequirement: "remote",
-    },
-  ],
-  userName: "Sinue el pro Mendoza",
-  serverUrl: "http://localhost:3000",
-} satisfies Parameters<typeof DailyJobListingEmail>[0];

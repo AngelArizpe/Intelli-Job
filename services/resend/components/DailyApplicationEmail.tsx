@@ -140,33 +140,3 @@ function RatingIcons({ rating }: { rating: number | null }) {
 
   return stars
 }
-
-DailyApplicationEmail.PreviewProps = {
-  applications: [
-    {
-      userName: "Angel",
-      organizationId: "org-1",
-      organizationName: "ITCHII",
-      jobListingId: "job-listing-1",
-      jobListingTitle: "Web developer",
-      rating: 3
-    },
-    {
-      userName: "Angel 2",
-      organizationId: "org-2",
-      organizationName: "ITCHII",
-      jobListingId: "job-listing-2",
-      jobListingTitle: "Web developer 2",
-      rating: 4
-    },
-    {
-      userName: "No es Angel",
-      organizationId: "org-1",
-      organizationName: "ITCHII",
-      jobListingId: "job-listing-1",
-      jobListingTitle: "Web developer",
-      rating: 5
-    },
-  ],
-  userName: "Sinue el pro Mendoza",
-} satisfies Parameters<typeof DailyApplicationEmail>[0];
