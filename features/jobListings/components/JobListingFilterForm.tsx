@@ -216,7 +216,7 @@ export function JobListingFilterForm() {
             className="w-full"
         >
             <LoadingSwap isLoading={form.formState.isSubmitting}>
-                Filer
+                Filter
             </LoadingSwap>
         </Button>
       </form>
